@@ -1,0 +1,107 @@
+/* tablet - pc */
+@media screen and (min-width:740px) { 
+    .hide-on-pc-tablet{
+        display: none;
+    }
+    
+    
+ }
+/* tablet - mobile */
+@media screen and (max-width: 1024px ) {
+   .hide-on-mobile-tablet{
+       display: none;
+   }
+   .header__cart{
+       text-align: center;
+   }
+   .carousel-item {
+        height: 300px;
+    }
+    .nav__bar-btn{
+        display: block;
+    }
+    
+
+    .header__navbar-header {
+        justify-content: center;
+    }
+    .header__cart-number{
+        right: 23px;
+        top: -5px;
+    }
+    .header__cart-wrap:hover .header__cart-list{
+        display: none;
+    }
+    .brand_page{
+        margin-top: 20px;
+    }
+    .background-brand-page-info-img{
+        top: -65%;
+        left:50%;
+        transform: translateX(-50%);
+    }
+    .background-brand-page-info{
+        height: 150px;
+    }
+    .background-brand-page-info-name{
+        top: 75px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .review-buy-product{
+        flex-direction: column;
+    }
+} 
+
+
+/* tablet */
+@media screen and (min-width:740px) and (max-width:1024px) { 
+   .hide-on-tablet{
+       display: none;
+   }
+   
+   .header__cart-list::after{
+        content: "";
+        position: absolute;
+        right: 37px;
+        top: -26px;
+        border-width: 16px 20px;
+        border-style: solid;
+        border-color: transparent transparent var(--white-color) transparent;
+        cursor: pointer;
+    }
+    .header__cart-list-items{
+        height: 30vh;
+    }
+    
+   
+}
+/* mobile */
+@media screen and (max-width:740px){
+    .hide-on-mobile{
+        display: none;
+    }
+
+    .home__product-ad-img{
+        padding-top: 10px;
+    }
+    .footer__info-list{
+        padding: 0;
+        text-align: center;
+    }
+    .footer__info-heading{
+        padding: 0;
+        text-align: center;
+    }
+    .background-brand-page-info-favorite{
+        right: 0;
+    }
+    .review-img-name{
+        font-size: 2.5rem;
+    }
+    .review-img-distcount{
+        display: inline-block;
+        margin-top: 13px;
+    }
+    
+}

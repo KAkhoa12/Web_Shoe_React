@@ -1,0 +1,119 @@
+/* tablet - pc */
+@media screen and (min-width:740px) { 
+    .hide-on-pc-tablet{
+        display: none;
+    }
+    
+    
+ }
+/* tablet - mobile */
+@media screen and (max-width: 1024px ) {
+   .hide-on-mobile-tablet{
+       display: none;
+   }
+   .header__cart{
+       text-align: center;
+   }
+   .carousel-item {
+        height: 300px;
+    }
+    .nav__bar-btn{
+        display: block;
+    }
+    
+
+    .header__navbar-header {
+        justify-content: center;
+    }
+    .header__cart-number{
+        right: 23px;
+        top: 0px;
+    }
+   
+} 
+
+
+/* tablet */
+@media screen and (min-width:740px) and (max-width:1024px) { 
+   .hide-on-tablet{
+       display: none;
+   }
+   
+   .header__cart-list::after{
+        content: "";
+        position: absolute;
+        right: 37px;
+        top: -26px;
+        border-width: 16px 20px;
+        border-style: solid;
+        border-color: transparent transparent var(--white-color) transparent;
+        cursor: pointer;
+    }
+    .header__cart-list-items{
+        height: 30vh;
+    }
+    .home__product-contact_heading{
+        margin-top: 10px;
+    }
+
+}
+/* mobile */
+@media screen and (max-width:740px){
+    .hide-on-mobile{
+        display: none;
+    }
+    .header__scroll-with-search{
+        margin-left: 10px;
+    }
+    .brand-shop-product-Operation{
+        display: block;
+        text-align: center;
+    }
+    .brand-shop-product-image-info{
+        padding-top: 8px;
+    }
+    .brand-shop-product-img{
+        width: 60px;
+        height: 60px;
+    }
+    .home__product-buy-cart-buys{
+        float: left;
+        padding-top: 15px;
+        width: 100%;
+    }
+    .home__product-buy-cart-buys-btn{
+        width: 100%;
+    }
+    .home__product-contact_heading{
+        margin-top: 10px;
+    }
+    .footer__info{
+        text-align: center;
+    }
+    .footer__info-list{
+        padding-bottom: 10px;
+        padding-left: 0;
+    }
+   .header__scroll-user{
+       flex-direction: column;
+   }
+   .scroll-user-img{
+       width: 150px;
+       height: 150px;
+   }
+   .scroll-user-name{
+       font-size: 2.4rem;
+       color: var(--text-color);
+       margin-top: 20px;   
+   }
+   .header__modal-body-icon-close{
+       display: block;
+       font-size: 2.6rem;
+       text-align: right;
+       padding: 10px 20px;
+   }
+   .brand-shop-product-Quantity{
+       padding-left: 10px;
+   }
+   
+}
