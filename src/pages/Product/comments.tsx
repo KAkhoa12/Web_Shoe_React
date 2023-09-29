@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ImgTest from "../../assets/images/name_shoe/Adidas/Adidas-4D-FUSIO-4tr2/giay-4d-fusio-fy3609-king-shoes-sneaker-real-hcm-1-1634377536.jpg"
 import { AlertCircleOutline, SendOutline, ArrowRedoOutline } from 'react-ionicons'
-import { ICommentsContent, ICommentsContentChild, IProduct } from '../../interfaces/interfaces'
+import { ICommentsContent, ICommentsContentChild, IListReportComments, IProduct } from '../../interfaces/interfaces'
 import useFetch from '../../hooks/useFetch'
 import useAuth from '../../hooks/useAuth'
 import { UpdateProductById } from '../../apis/Product'
 import imgUser from "../../assets/images/user.png"
+import LoadingItems from '../../components/LazyLoad/LoadingItems/LoadingItems'
+import { PostReportComment } from '../../apis/ListReportComments'
 
 interface IComments {
     product?: IProduct
     hasChange: () => void;
+    isLoading:boolean
 }
 
 
@@ -23,6 +26,7 @@ const Comments = ({ ...props }: IComments): JSX.Element => {
     const { profile } = useAuth()
     const [isContentChild, setIsContentChild] = React.useState<string>('');
     const [updateProduct, callupdateProduct] = useFetch();
+    const [reportComment,callReportComment]=useFetch();
     const [listComments, setListComments] = useState<ICommentsContent[]>([]);
 
 
@@ -34,7 +38,27 @@ const Comments = ({ ...props }: IComments): JSX.Element => {
             userNameRecomment: ''
         })
     }
-
+    const handleReport = (
+        idProduct:string | undefined,idUserReport:string | undefined,idUserIsReport:string |undefined ,commentReport:string,index:number,childIndex:number
+    ):void =>{
+        const requestData:IListReportComments={
+            idProduct : idProduct,
+            commentReport:commentReport,
+            idUserIsReport:idUserIsReport,
+            idUserReport:idUserReport,
+            index:index,
+            childIndex : childIndex,
+        }
+        console.log(requestData);
+        
+        callReportComment(async () => {
+            try {
+              await PostReportComment(requestData)
+            }catch(error){
+                console.log(error);
+            }
+        });
+    }
     const handleChangeContentChild = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsContentChild(e.target.value)
         setContent('')
@@ -164,198 +188,214 @@ const Comments = ({ ...props }: IComments): JSX.Element => {
                     paddingBottom:"70px"
                 }}
             >
-
                 {
-                    listComments.length === 0    ? (
+                    props.isLoading ?(
                         <div
                             style={{
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                fontSize: "25px",
-                                fontWeight: "bold",
                                 height:"100%"
                             }}
                         >
-                            Chưa có bình luận nào cho sản phẩm này
+                            <LoadingItems/>
                         </div>
-                    ) : (
-                        listComments?.map((item: ICommentsContent, index: number) => (
+                    ):(
+                        listComments.length === 0    ? (
                             <div
-                                key={index}
-
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontSize: "25px",
+                                    fontWeight: "bold",
+                                    height:"100%"
+                                }}
                             >
+                                Chưa có bình luận nào cho sản phẩm này
+                            </div>
+                        ) : (
+                            listComments?.map((item: ICommentsContent, index: number) => (
                                 <div
-
+                                    key={index}
+    
                                 >
                                     <div
-                                        style={{
-                                            padding: "10px",
-                                            margin: "5px",
-                                            borderRadius: "5px",
-                                            display: "inline-flex",
-                                        }}
+    
                                     >
                                         <div
                                             style={{
-                                                display: "flex",
+                                                padding: "10px",
+                                                margin: "5px",
+                                                borderRadius: "5px",
+                                                display: "inline-flex",
                                             }}
                                         >
-                                            <img src={imgUser} style={{ height: "50px", width: "50px", borderRadius: "50%" }} alt="" />
-                                        </div>
-                                        <div
-                                            style={{
-                                                fontSize: "20px",
-                                                marginLeft: "5px",
-                                                display: "flex",
-                                                borderRadius: "3px",
-                                                alignItems: "flex-start",
-                                                gap: "10px",
-                                                flexDirection: "column",
-                                                backgroundColor: "#f0f0f0",
-                                                padding: "10px"
-                                            }}
-                                        >
-                                            <span style={{ fontSize: "22px", fontWeight: "bold", color: "#f7484a" }}>{item?.username}</span>
-                                            <div style={{
-
-                                            }}>
-                                                {item.content}
-                                                <span className='setting-comments-report'>
-                                                    <AlertCircleOutline
-                                                        color={'#000000'}
-                                                    />
-                                                </span>
-                                                <span
-                                                    onClick={(): void => handleGetInfoContentChild(index, item.username)}
-                                                    className='setting-comments-report'
-                                                >
-                                                    <ArrowRedoOutline
-                                                        color={'#000000'}
-                                                    />
-                                                </span>
-
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                }}
+                                            >
+                                                <img src={imgUser} style={{ height: "50px", width: "50px", borderRadius: "50%" }} alt="" />
                                             </div>
-                                        </div>
-                                    </div>
-                                    {
-                                        contentChild.index === index && (
-                                            <div >
-                                                <span
-                                                    style={{
-                                                        marginLeft: "70px",
-                                                        fontSize: "18px",
-                                                        fontWeight: "bold",
-                                                        color: "#f7484a"
-                                                    }}
-                                                >
-                                                    Phản hồi về {contentChild.userNameRecomment}
-                                                </span>
-                                                <div
-                                                    style={{
-                                                        display: "flex",
-                                                        gap: "10px",
-                                                        margin: "0 70px"
-                                                    }}
-                                                    onKeyDown={handleKeyPressEnter}
-                                                >
-                                                    <input
-                                                        value={isContentChild}
-                                                        type='text'
-                                                        style={{ width: "100%", fontSize: "22px", height: "35px", padding: "0 10px" }}
-                                                        placeholder='Nhập bình luận tại đây'
-                                                        onChange={handleChangeContentChild}
-                                                    />
-                                                    <button
-                                                        onClick={handleSubmitContentChild}
-                                                        style={{ border: "none", }}><SendOutline color={'#000000'} />
-                                                    </button>
-
+                                            <div
+                                                style={{
+                                                    fontSize: "20px",
+                                                    marginLeft: "5px",
+                                                    display: "flex",
+                                                    borderRadius: "3px",
+                                                    alignItems: "flex-start",
+                                                    gap: "10px",
+                                                    flexDirection: "column",
+                                                    backgroundColor: "#f0f0f0",
+                                                    padding: "10px"
+                                                }}
+                                            >
+                                                <span style={{ fontSize: "24px", fontWeight: "bold", color: "#f7484a" }}>{item?.username}</span>
+                                                <div>
+                                                    {item.content}
+                                                    <span 
+                                                        className='setting-comments-report' 
+                                                        onClick={():void=>handleReport(props.product?._id,item.userId,profile?._id,item.content,index,0)}
+                                                    >
+                                                        <AlertCircleOutline
+                                                            color={'#000000'}
+                                                        />
+                                                    </span>
+                                                    <span
+                                                        onClick={(): void => handleGetInfoContentChild(index, item.username)}
+                                                        className='setting-comments-report'
+                                                    >
+                                                        <ArrowRedoOutline
+                                                            color={'#000000'}
+                                                        />
+                                                    </span>
+    
                                                 </div>
                                             </div>
-
-                                        )
-                                    }
-
-                                </div>
-                                {
-                                    item?.commentChild !== undefined ? (
-                                        item?.commentChild?.filter((r: ICommentsContentChild) => r.content !== "").map((childComment: ICommentsContentChild, childIndex: number) => (
-                                            <div key={childIndex} style={{ marginLeft: "70px" }}>
-                                                <div
-                                                    style={{
-                                                        padding: "10px",
-                                                        margin: "5px",
-                                                        borderRadius: "5px",
-                                                        display: "inline-flex",
-                                                    }}
-                                                >
-                                                    <div
+                                        </div>
+                                        {
+                                            contentChild.index === index && (
+                                                <div >
+                                                    <span
                                                         style={{
-                                                            display: "flex",
+                                                            marginLeft: "70px",
+                                                            fontSize: "18px",
+                                                            fontWeight: "bold",
+                                                            color: "#f7484a"
                                                         }}
                                                     >
-                                                        <img src={imgUser} style={{ height: "50px", width: "50px", borderRadius: "50%" }} alt="" />
-                                                    </div>
+                                                        Phản hồi về {contentChild.userNameRecomment}
+                                                    </span>
                                                     <div
                                                         style={{
-                                                            fontSize: "20px",
-                                                            marginLeft: "5px",
                                                             display: "flex",
-                                                            borderRadius: "3px",
-                                                            alignItems: "flex-start",
                                                             gap: "10px",
-                                                            flexDirection: "column",
-                                                            backgroundColor: "#f0f0f0",
-                                                            padding: "10px"
+                                                            margin: "0 70px"
+                                                        }}
+                                                        onKeyDown={handleKeyPressEnter}
+                                                    >
+                                                        <input
+                                                            value={isContentChild}
+                                                            type='text'
+                                                            style={{ width: "100%", fontSize: "22px", height: "35px", padding: "0 10px" }}
+                                                            placeholder='Nhập bình luận tại đây'
+                                                            onChange={handleChangeContentChild}
+                                                        />
+                                                        <button
+                                                            onClick={handleSubmitContentChild}
+                                                            style={{ border: "none", }}><SendOutline color={'#000000'} />
+                                                        </button>
+    
+                                                    </div>
+                                                </div>
+    
+                                            )
+                                        }
+    
+                                    </div>
+                                    {
+                                        item?.commentChild !== undefined ? (
+                                            item?.commentChild?.filter((r: ICommentsContentChild) => r.content !== "").map((childComment: ICommentsContentChild, childIndex: number) => (
+                                                <div key={childIndex} style={{ marginLeft: "70px" }}>
+                                                    <div
+                                                        style={{
+                                                            padding: "10px",
+                                                            margin: "5px",
+                                                            borderRadius: "5px",
+                                                            display: "inline-flex",
                                                         }}
                                                     >
                                                         <div
                                                             style={{
                                                                 display: "flex",
-                                                                alignItems: "center",
-                                                                gap: "10px"
                                                             }}
                                                         >
-                                                            <span style={{ fontSize: "22px", fontWeight: "bold", color: "#f7484a" }}>
-                                                                {childComment?.username}
-                                                            </span>
-                                                            <span>phản hồi</span>
-                                                            <span style={{ fontSize: "17px", fontWeight: "bold", color: "#f7484a" }}>
-                                                                {childComment?.userRecommend}
-                                                            </span>
-
+                                                            <img src={imgUser} style={{ height: "50px", width: "50px", borderRadius: "50%" }} alt="" />
                                                         </div>
-                                                        <div style={{
-
-                                                        }}>
-                                                            {childComment.content}
-                                                            <span className='setting-comments-report'>
-                                                                <AlertCircleOutline
-                                                                    color={'#000000'}
-                                                                />
-                                                            </span>
-                                                            <span
-                                                                onClick={(): void => handleGetInfoContentChild(index, childComment.username)}
-                                                                className='setting-comments-report'
+                                                        <div
+                                                            style={{
+                                                                fontSize: "20px",
+                                                                marginLeft: "5px",
+                                                                display: "flex",
+                                                                borderRadius: "3px",
+                                                                alignItems: "flex-start",
+                                                                gap: "10px",
+                                                                flexDirection: "column",
+                                                                backgroundColor: "#f0f0f0",
+                                                                padding: "10px"
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    gap: "10px"
+                                                                }}
                                                             >
-                                                                <ArrowRedoOutline
-                                                                    color={'#000000'}
-                                                                />
-                                                            </span>
-
+                                                                <span style={{ fontSize: "22px", fontWeight: "bold", color: "#f7484a" }}>
+                                                                    {childComment?.username}
+                                                                </span>
+                                                                <span style={{color:"#878787",fontSize:"15px"}}>phản hồi về</span>
+                                                                <span style={{ fontSize: "17px", fontWeight: "bold", color: "#f7484a" }}>
+                                                                    {childComment?.userRecommend}
+                                                                </span>
+    
+                                                            </div>
+                                                            <div style={{
+    
+                                                            }}>
+                                                                {childComment.content}
+                                                                <span 
+                                                                    className='setting-comments-report'
+                                                                    onClick={():void=>handleReport(props.product?._id,childComment.userId,profile?._id,childComment.content,index,childIndex)}
+                                                                >
+                                                                    <AlertCircleOutline
+                                                                        color={'#000000'}
+                                                                    />
+                                                                </span>
+                                                                <span
+                                                                    onClick={(): void => handleGetInfoContentChild(index, childComment.username)}
+                                                                    className='setting-comments-report'
+                                                                >
+                                                                    <ArrowRedoOutline
+                                                                        color={'#000000'}
+                                                                    />
+                                                                </span>
+    
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        null
-                                    )
-                                }
-
-                            </div>
-                        ))
+                                            ))
+                                        ) : (
+                                            null
+                                        )
+                                    }
+    
+                                </div>
+                            ))
+                        )
                     )
                 }
 

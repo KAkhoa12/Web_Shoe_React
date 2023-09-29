@@ -9,9 +9,14 @@ interface IPramsRoute{
 }
 
 export const RoutePage:IPramsRoute[]=[
-    {path:'/',element:<Home />},
     {path:'/Shop',element:<Shop />},
     {path:'/ProductDetail/:id',element:<ProductDetail/>},
+    {path:'/Login',element:<Login/>},
+    {path:'/Register',element:<Register/>},
+]
+
+export const RouteShared:IPramsRoute[]=[
+    {path:'/',element:<Home />},
     {path:'/Login',element:<Login/>},
     {path:'/Register',element:<Register/>},
 ]

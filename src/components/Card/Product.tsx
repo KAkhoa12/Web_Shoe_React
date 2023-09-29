@@ -10,7 +10,7 @@ interface PropsChildProduct {
     discountPercent?: number,
     isBestseller: boolean,
     img?:string,
-    proId?:string
+    proId:string
 }
 const ItemProduct = ({ ...prop }: PropsChildProduct): JSX.Element => {
     return (

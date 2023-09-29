@@ -8,16 +8,18 @@ import {
     CubeOutline
 } from 'react-ionicons'
 import LogoWeb from '../../assets/images/LOGOWED.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import useFetch from '../../hooks/useFetch'
 import { GetAllProductType } from '../../apis/ProductType'
 import { IProductType, IChildrenNavbar, INavbar } from '../../interfaces/interfaces'
 import ImageTest from "../../assets/images/name_shoe/Adidas/Adidas-4D-FUSIO-4tr2/giay-4d-fusio-fy3609-king-shoes-sneaker-real-hcm-1-1634377536.jpg"
 import useAuth from '../../hooks/useAuth'
+import { LogoutUser } from '../../apis/User'
 const Header = (): JSX.Element => {
     const [getAllProductType, callAllProductType] = useFetch();
+    const [logout,callLogout] = useFetch();
     const { profile } = useAuth();
-
+    const navigate = useNavigate()
     const listNavbar: INavbar[] = [
         { name: "HOME", path: "/", icon: <HomeOutline color='#ffffff' style={{ display: 'flex', alignItems: 'center' }} /> },
         { name: "SHOP", path: "/Shop", icon: <CubeOutline color='#ffffff' style={{ display: 'flex', alignItems: 'center' }} /> },
@@ -45,7 +47,14 @@ const Header = (): JSX.Element => {
             }]
         }
     ]
-
+    const handleSignOut =async ():Promise<void>=>{
+        try{
+            await callLogout(LogoutUser)
+            await navigate("/Login")
+        }catch(error){
+            console.log(error)
+        }
+    }
     React.useEffect(() => {
         callAllProductType(GetAllProductType);
     }, [])
@@ -93,16 +102,16 @@ const Header = (): JSX.Element => {
                                                         fontSize:"20px"
                                                     }}
                                                 >Xin chào {profile.userName}</h3>
-                                                <Link
+                                                <span
                                                     style={{
                                                         textDecoration: "none",
                                                         height:"auto"
                                                     }}
-                                                    to={'/Register'}
+                                                    onClick={handleSignOut}
                                                     className="header_navbar-user header_navbar-register  border-btn-m--hover"
                                                 >
-                                                    Đăng Xuất
-                                                </Link>
+                                                    Sign Out
+                                                </span>
                                             </li>
                                         </>
                                     ) : (

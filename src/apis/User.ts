@@ -86,3 +86,13 @@ export const RemoveUserById = async ({ _id }: {_id: string }): Promise<any> => {
     throw new Error(message)
   }
 }
+
+export const LogoutUser = async () : Promise<any> => {
+  try {
+    const { data } = await server.get('/User/LogoutUser')
+    return data
+  } catch (error: any) {
+    const message = error?.response?.data?.message ?? error.message
+    throw new Error(message)
+  }
+}

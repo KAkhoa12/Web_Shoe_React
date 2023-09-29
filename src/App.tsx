@@ -10,7 +10,8 @@ import './assets/css/reponsive.css'
 import './assets/css/reponsive_cart.css'
 
 import { Route, Routes } from 'react-router-dom'
-import { RoutePage } from './routers/Routes'
+import { RoutePage,RouteShared} from './routers/Routes'
+import PrivateRoute from './routers/PrivateRoute'
 interface IRoute{
   path:string
   element:JSX.Element
@@ -18,7 +19,12 @@ interface IRoute{
 function App() {
   return (
     <Routes>
-      <Route>
+      {
+        RouteShared.map((item:IRoute,index)=>(
+          <Route key={index} path={item.path} element={item.element}></Route>
+        ))
+      }
+      <Route element={<PrivateRoute/>}>
         {
           RoutePage.map((item:IRoute,index)=>(
             <Route key={index} path={item.path} element={item.element}></Route>

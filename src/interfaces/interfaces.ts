@@ -63,22 +63,22 @@ export interface IProduct {
     price: number,
     isDelete: number,
     numberOfComments: number,
-    comments?:ICommentsContent []
+    comments?: ICommentsContent[]
 }
-export interface ICommentsContent{
+export interface ICommentsContent {
     userId?: string,
-    username?:string,
+    username?: string,
     content: string,
-    commentChild?:ICommentsContentChild [] | null
+    commentChild?: ICommentsContentChild[] | null
 }
 
-export interface ICommentsContentChild{
+export interface ICommentsContentChild {
     userId?: string,
-    username?:string,
+    username?: string,
     content: string,
-    userRecommend:string
+    userRecommend: string
 }
-export interface IProductType{
+export interface IProductType {
     _id: string,
     proTypeName: string,
     isDelete: number,
@@ -98,9 +98,19 @@ export interface INavbar {
     children?: IChildrenNavbar[]
 }
 
-export interface IBrand{
+export interface IBrand {
     _id: string,
     brandName: string,
     brandImage: string,
     isDelete: number
+}
+
+export interface IListReportComments {
+    _id?: string,
+    idProduct?: string,
+    idUserReport?: string,
+    idUserIsReport?: string,
+    commentReport: string,
+    index: number,
+    childIndex: number
 }

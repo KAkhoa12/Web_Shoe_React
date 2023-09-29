@@ -177,6 +177,7 @@ const ProductDetail = ():JSX.Element=>{
                                     }}
                                 >
                                     <Comments 
+                                        isLoading={getProductById?.loading}
                                         product={product} 
                                         hasChange={handleHaschangeProduct}
                                     />
